@@ -1,18 +1,18 @@
 {
-  "titulo": "Reunión Elegidos Assemble",
-  "sede": "",
+  "titulo": "¡Reunión Elegidos Assemble!",
+  "sede": "Petit Roquefort",
   "descripcion": "",
   "enlace": "",
-  "inicio": "2026-09-15T09:00",
-  "fin": "2026-09-15T18:00",
+  "inicio": "2026-08-29T09:00",
+  "fin": "2026-08-29T14:00",
   "zona": "America/Mexico_City",
   "todoElDia": false,
   "recordatorio": 60,
-  "uid": "btc-reunion-elegidos-assemble@btcamericas.com",
+  "uid": "reunion-elegidos-assemble",
   "secuencia": 0,
   "invitacion": false,
   "organizador": {
-    "nombre": "BTC Américas",
-    "correo": "eventos@btcamericas.com"
+    "nombre": "Elegido OG",
+    "correo": ""
   }
 }
