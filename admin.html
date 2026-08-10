@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Panel de eventos · BTC Américas</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700&family=Nunito+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/pase.css">
+<style>
+  header{background:var(--navy);color:#fff;padding:32px 24px 40px}
+  .wrap{max-width:1180px;margin:0 auto}
+  header .eyebrow{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:#8FA6C4;font-weight:700;margin:0}
+  header h1{font-size:clamp(22px,4.5vw,30px);font-weight:700;margin:8px 0}
+  header h1 em{font-style:normal;color:var(--red)}
+  header p{margin:0;max-width:62ch;color:#C6D2E1;font-size:14px}
+  main{max-width:1180px;margin:-32px auto 40px;padding:0 24px;
+    display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:24px;align-items:start}
+  @media(max-width:900px){main{grid-template-columns:1fr;gap:16px}}
+  .card{background:#fff;border:1px solid var(--line);border-radius:var(--r-l);padding:24px;
+    box-shadow:0 1px 2px rgba(11,20,36,.04),0 8px 24px rgba(11,20,36,.06)}
+  .card + .card{margin-top:16px}
+  .card h2{font-size:16px;font-weight:700;margin-bottom:16px;display:flex;align-items:center;gap:8px}
+  .card h2::before{content:"";width:3px;height:16px;background:var(--red);border-radius:2px}
+  label{display:block;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;
+    color:var(--muted);margin-bottom:6px}
+  input,textarea,select{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:var(--r-m);
+    font-family:inherit;font-size:14px;color:var(--ink);background:#fff}
+  input:focus,textarea:focus,select:focus{outline:2px solid var(--blue);outline-offset:1px;border-color:var(--blue)}
+  textarea{resize:vertical;min-height:72px}
+  .field{margin-bottom:16px}
+  .row{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  @media(max-width:520px){.row{grid-template-columns:1fr}}
+  .hint{font-size:12px;color:var(--muted);margin:6px 0 0}
+  .switch{display:flex;align-items:center;gap:10px;margin-bottom:16px}
+  .switch input{width:auto;accent-color:var(--red)}
+  .switch label{margin:0;text-transform:none;letter-spacing:0;font-size:14px;color:var(--ink)}
+  .tabs{display:flex;gap:4px;border-bottom:1px solid var(--line);margin-bottom:16px;flex-wrap:wrap}
+  .tab{background:none;border:0;padding:10px 12px;font:inherit;font-weight:700;font-size:13px;
+    color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px}
+  .tab[aria-selected="true"]{color:var(--navy);border-bottom-color:var(--red)}
+  pre{background:#0B1424;color:#D7E2F0;padding:16px;border-radius:var(--r-m);overflow:auto;
+    font-size:11.5px;line-height:1.5;max-height:320px;margin:0;white-space:pre-wrap;word-break:break-all}
+  .acciones{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+  .btn{background:var(--navy);color:#fff;border:0;border-radius:var(--r-m);padding:10px 14px;
+    font:inherit;font-weight:700;font-size:13px;cursor:pointer;text-decoration:none;display:inline-block}
+  .btn:hover{background:#00396f}
+  .btn.rojo{background:var(--red)}.btn.rojo:hover{background:#c40023}
+  .btn.linea{background:#fff;color:var(--navy);border:1px solid var(--line)}
+  .nota{background:#FFF4F6;border-left:3px solid var(--red);padding:16px;border-radius:0 var(--r-m) var(--r-m) 0;font-size:13px}
+  .nota code{background:rgba(0,40,86,.08);padding:1px 5px;border-radius:4px;font-size:12px}
+  .nota ol{margin:8px 0 0;padding-left:20px}.nota li{margin-bottom:6px}
+  footer{max-width:1180px;margin:0 auto;padding:0 24px 40px;color:var(--muted);font-size:12px}
+</style>
+</head>
+<body>
+
+<header><div class="wrap">
+  <p class="eyebrow">Interno · no indexado</p>
+  <h1>Panel de <em>eventos</em></h1>
+  <p>Editás acá, publicás un JSON. El pase que ve el asistente nunca cambia de maquetación.</p>
+</div></header>
+
+<main>
+  <section>
+    <div class="card">
+      <h2>Evento</h2>
+      <div class="row">
+        <div class="field">
+          <label for="slug">Identificador (slug)</label>
+          <input id="slug" value="reunion-elegidos-assemble">
+          <p class="hint">Nombre del archivo: <code>eventos/[slug].json</code></p>
+        </div>
+        <div class="field">
+          <label for="cargar">Cargar existente</label>
+          <button class="btn linea" id="cargar" style="width:100%;padding:11px">Traer JSON publicado</button>
+          <p class="hint" id="estado"></p>
+        </div>
+      </div>
+      <div class="field"><label for="titulo">Título</label><input id="titulo" value="Reunión Elegidos Assemble"></div>
+      <div class="field"><label for="sede">Sede</label><input id="sede" value="" placeholder="Sede del evento"></div>
+      <div class="field"><label for="descripcion">Descripción</label><textarea id="descripcion" placeholder="Detalles para el asistente"></textarea></div>
+      <div class="field">
+        <label for="enlace">Enlace para compartir</label>
+        <input id="enlace" value="" placeholder="https://...">
+        <p class="hint">Sitio o registro del evento. Va en la descripción del .ics.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Fecha y hora</h2>
+      <div class="switch"><input type="checkbox" id="todoElDia"><label for="todoElDia">Evento de todo el día</label></div>
+      <div class="row">
+        <div class="field"><label for="sd">Inicio · fecha</label><input type="date" id="sd" value="2026-09-15"></div>
+        <div class="field hora"><label for="st">Inicio · hora</label><input type="time" id="st" value="09:00"></div>
+      </div>
+      <div class="row">
+        <div class="field"><label for="ed">Fin · fecha</label><input type="date" id="ed" value="2026-09-15"></div>
+        <div class="field hora"><label for="et">Fin · hora</label><input type="time" id="et" value="18:00"></div>
+      </div>
+      <div class="row">
+        <div class="field">
+          <label for="zona">Zona horaria</label>
+          <select id="zona">
+            <option value="America/Mexico_City" selected>Ciudad de México</option>
+            <option value="America/Cancun">Cancún</option>
+            <option value="America/Monterrey">Monterrey</option>
+            <option value="America/Tijuana">Tijuana</option>
+            <option value="America/Bogota">Bogotá</option>
+            <option value="America/Lima">Lima</option>
+            <option value="America/Santiago">Santiago</option>
+            <option value="America/Argentina/Buenos_Aires">Buenos Aires</option>
+            <option value="America/Sao_Paulo">São Paulo</option>
+            <option value="America/New_York">Nueva York</option>
+            <option value="America/Los_Angeles">Los Ángeles</option>
+            <option value="Europe/Madrid">Madrid</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="recordatorio">Recordatorio</label>
+          <select id="recordatorio">
+            <option value="0">Sin recordatorio</option>
+            <option value="15">15 minutos antes</option>
+            <option value="60" selected>1 hora antes</option>
+            <option value="1440">1 día antes</option>
+            <option value="10080">1 semana antes</option>
+          </select>
+          <p class="hint">Google lo ignora si el usuario tiene su propia preferencia.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Publicación</h2>
+      <div class="field">
+        <label for="base">URL base del sitio</label>
+        <input id="base" value="https://baruchsilva.github.io/eventos">
+        <p class="hint">Se usa para armar el enlace del pase y el mensaje de WhatsApp.</p>
+      </div>
+      <div class="row">
+        <div class="field">
+          <label for="uid">UID (no cambiar nunca)</label>
+          <input id="uid" value="btc-reunion-elegidos-assemble@btcamericas.com">
+        </div>
+        <div class="field">
+          <label for="secuencia">Secuencia</label>
+          <input type="number" id="secuencia" value="0" min="0">
+          <p class="hint">Subila +1 en cada cambio publicado.</p>
+        </div>
+      </div>
+      <div class="switch"><input type="checkbox" id="invitacion"><label for="invitacion">Enviar como invitación (METHOD:REQUEST)</label></div>
+      <div class="row inv">
+        <div class="field"><label for="orgNombre">Organizador</label><input id="orgNombre" value="BTC Américas"></div>
+        <div class="field"><label for="orgCorreo">Correo del organizador</label><input id="orgCorreo" type="email" value="eventos@btcamericas.com"></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div id="preview"></div>
+
+    <div class="card">
+      <h2>Salida</h2>
+      <div class="tabs" role="tablist">
+        <button class="tab" role="tab" aria-selected="true" data-p="json">JSON</button>
+        <button class="tab" role="tab" aria-selected="false" data-p="wa">WhatsApp</button>
+        <button class="tab" role="tab" aria-selected="false" data-p="mail">Mailing</button>
+        <button class="tab" role="tab" aria-selected="false" data-p="ics">.ics</button>
+      </div>
+      <pre id="out"></pre>
+      <div class="acciones">
+        <button class="btn" id="copiar">Copiar</button>
+        <a class="btn rojo" id="bajarJson" download>Descargar JSON</a>
+        <a class="btn linea" id="verPase" target="_blank" rel="noopener">Abrir pase</a>
+        <a class="btn linea" id="wa" target="_blank" rel="noopener">Compartir</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Cómo publicar un cambio</h2>
+      <div class="nota">
+        <ol>
+          <li>Editás los campos y descargás el JSON.</li>
+          <li>Lo subís a <code>eventos/</code> en el repo, mismo nombre de archivo.</li>
+          <li>GitHub Pages redeploya en ~1 min. El pase muestra lo nuevo al recargar.</li>
+          <li>Si el evento ya se difundió y cambió fecha o sede: subí <code>secuencia</code> +1 y reenviá el .ics. Los calendarios que ya lo tienen solo actualizan con mismo UID y secuencia mayor.</li>
+        </ol>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>RFC 5545 · Horas convertidas a UTC desde la zona seleccionada · Sin backend</footer>
+
+<script src="assets/calendario.js"></script>
+<script>
+const $ = id => document.getElementById(id);
+const campos = ['slug','titulo','sede','descripcion','enlace','todoElDia','sd','st','ed','et',
+  'zona','recordatorio','base','uid','secuencia','invitacion','orgNombre','orgCorreo'];
+let vista = 'json';
+
+function evento(){
+  const v = {};
+  campos.forEach(k => v[k] = $(k).type === 'checkbox' ? $(k).checked : $(k).value.trim());
+  return {
+    titulo: v.titulo, sede: v.sede, descripcion: v.descripcion, enlace: v.enlace,
+    inicio: v.sd + (v.todoElDia ? '' : 'T' + (v.st || '00:00')),
+    fin: (v.ed || v.sd) + (v.todoElDia ? '' : 'T' + (v.et || v.st || '00:00')),
+    zona: v.zona, todoElDia: v.todoElDia, recordatorio: Number(v.recordatorio) || 0,
+    uid: v.uid, secuencia: Number(v.secuencia) || 0, invitacion: v.invitacion,
+    organizador: { nombre: v.orgNombre, correo: v.orgCorreo },
+    _slug: v.slug, _base: v.base.replace(/\/$/, '')
+  };
+}
+function json(e){
+  const c = Object.assign({}, e);
+  delete c._slug; delete c._base; delete c.inicioUTC; delete c.finUTC;
+  return JSON.stringify(c, null, 2);
+}
+function urlPase(e){ return e._base + '/pase.html?e=' + e._slug; }
+
+function mailing(e, l){
+  const b = (h,t,bg,c,bd) =>
+'      <td style="padding:0 8px 8px 0;"><table role="presentation" cellpadding="0" cellspacing="0" border="0"><tr>\n' +
+'        <td align="center" bgcolor="' + bg + '" style="border-radius:8px;border:1px solid ' + bd + ';">\n' +
+'          <a href="' + h + '" target="_blank" style="display:inline-block;padding:12px 20px;font-family:\'Nunito Sans\',Arial,sans-serif;font-size:14px;font-weight:700;color:' + c + ';text-decoration:none;">' + t + '</a>\n' +
+'        </td></tr></table></td>';
+  return '<!-- Bloque "Agregar al calendario" · BTC Américas -->\n' +
+'<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#F4F6F9;border-radius:16px;">\n' +
+'  <tr><td style="padding:24px;">\n' +
+'    <p style="margin:0 0 4px;font-family:\'Nunito Sans\',Arial,sans-serif;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:#5B6779;font-weight:700;">Agendalo</p>\n' +
+'    <p style="margin:0 0 16px;font-family:Montserrat,Arial,sans-serif;font-size:18px;font-weight:700;color:#002856;">' + e.titulo + '</p>\n' +
+'    <table role="presentation" cellpadding="0" cellspacing="0" border="0"><tr>\n' +
+b(urlPase(e),'Ver el pase','#EA0029','#ffffff','#EA0029') + '\n' +
+b(l.google,'Google','#ffffff','#002856','#DCE1E8') + '\n' +
+b(l.office,'Microsoft 365','#ffffff','#002856','#DCE1E8') + '\n' +
+'    </tr></table>\n  </td></tr>\n</table>';
+}
+
+function pintaPreview(e){
+  const l = CAL.links(e);
+  const b = (h,t,p,d) => '<a class="b' + (p?' p':'') + '" href="' + h + '"' +
+    (d ? ' download="' + CAL.nombreArchivo(e) + '"' : ' target="_blank" rel="noopener"') +
+    '>' + t + '<span class="a">' + (d?'↓':'↗') + '</span></a>';
+  $('preview').innerHTML =
+    '<div class="pase"><div class="pase-body">' +
+      '<p class="k">Vista del asistente</p><h3>' + (e.titulo || 'Sin título') + '</h3>' +
+      '<div class="meta">' +
+        '<div><p class="k">Cuándo</p><p>' + CAL.fechaLarga(e) + '</p><p>' + CAL.horas(e) + '</p></div>' +
+        '<div><p class="k">Dónde</p><p>' + (e.sede || '—') + '</p></div>' +
+      '</div></div><div class="perf"></div><div class="pase-foot">' +
+      b(CAL.icsDataURI(e), 'Apple / Outlook escritorio', true, true) +
+      b(l.google, 'Google Calendar') + b(l.office, 'Microsoft 365') + b(l.outlook, 'Outlook.com') +
+    '</div></div>';
+}
+
+function render(){
+  const e = evento(), l = CAL.links(e), j = json(e);
+  pintaPreview(e);
+  $('out').textContent = vista === 'json' ? j
+    : vista === 'wa' ? CAL.textoWhatsApp(e, urlPase(e))
+    : vista === 'mail' ? mailing(e, l)
+    : CAL.ics(e);
+  $('bajarJson').href = 'data:application/json;charset=utf-8,' + encodeURIComponent(j);
+  $('bajarJson').download = (e._slug || 'evento') + '.json';
+  $('verPase').href = urlPase(e);
+  $('wa').href = 'https://wa.me/?text=' + encodeURIComponent(CAL.textoWhatsApp(e, urlPase(e)));
+  document.querySelectorAll('.field.hora').forEach(x => x.style.display = e.todoElDia ? 'none' : '');
+  document.querySelectorAll('.inv').forEach(x => x.style.display = e.invitacion ? '' : 'none');
+}
+
+campos.forEach(k => $(k).addEventListener('input', render));
+document.querySelectorAll('.tab').forEach(t => t.addEventListener('click', () => {
+  document.querySelectorAll('.tab').forEach(x => x.setAttribute('aria-selected', x === t));
+  vista = t.dataset.p; render();
+}));
+$('copiar').addEventListener('click', async () => {
+  await navigator.clipboard.writeText($('out').textContent);
+  $('copiar').textContent = 'Copiado';
+  setTimeout(() => $('copiar').textContent = 'Copiar', 1600);
+});
+$('cargar').addEventListener('click', () => {
+  const s = $('slug').value.trim();
+  $('estado').textContent = 'Buscando…';
+  fetch('eventos/' + s + '.json', {cache:'no-cache'})
+    .then(r => { if (!r.ok) throw 0; return r.json(); })
+    .then(d => {
+      $('titulo').value = d.titulo || ''; $('sede').value = d.sede || '';
+      $('descripcion').value = d.descripcion || ''; $('enlace').value = d.enlace || '';
+      $('todoElDia').checked = !!d.todoElDia;
+      $('sd').value = (d.inicio || '').slice(0,10); $('st').value = (d.inicio || '').slice(11,16);
+      $('ed').value = (d.fin || '').slice(0,10);    $('et').value = (d.fin || '').slice(11,16);
+      $('zona').value = d.zona || 'America/Mexico_City';
+      $('recordatorio').value = String(d.recordatorio || 0);
+      $('uid').value = d.uid || ''; $('secuencia').value = (d.secuencia || 0) + 1;
+      $('invitacion').checked = !!d.invitacion;
+      $('orgNombre').value = (d.organizador || {}).nombre || '';
+      $('orgCorreo').value = (d.organizador || {}).correo || '';
+      $('estado').textContent = 'Cargado. Secuencia subida a ' + $('secuencia').value + '.';
+      render();
+    })
+    .catch(() => $('estado').textContent = 'No encontrado. Se crea como nuevo.');
+});
+render();
+</script>
+</body>
+</html>
